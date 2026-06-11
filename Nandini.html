@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Professional Full Stack Developer Portfolio Website">
+  <meta name="keywords" content="Full Stack Developer, JavaScript, Node.js, Portfolio">
+  <meta name="author" content="Your Name">
+
+  <title>My PersonalPortfolio</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AOS Animation -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
+      font-family:'Poppins',sans-serif;
+    }
+
+    :root{
+      --bg:#0b1020;
+      --card:rgba(255,255,255,0.08);
+      --text:#fff;
+      --accent:#8b5cf6;
+      --secondary:#00d4ff;
+      --glass:blur(12px);
+    }
+
+    body.light{
+      --bg:#f5f5f5;
+      --card:rgba(255,255,255,0.7);
+      --text:#111;
+    }
+
+    body{
+      background:linear-gradient(135deg,#090b1a,#12172f,#1d1135);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* Loader */
+
+    #loader{
+      position:fixed;
+      width:100%;
+      height:100vh;
+      background:#000;
+      z-index:9999;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .spinner{
+      width:60px;
+      height:60px;
+      border:5px solid #444;
+      border-top:5px solid var(--accent);
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+    }
+
+    @keyframes spin{
+      100%{transform:rotate(360deg);}
+    }
+
+    /* Navbar */
+
+    header{
+      position:fixed;
+      width:100%;
+      top:0;
+      z-index:1000;
+      backdrop-filter:blur(12px);
+      background:rgba(0,0,0,0.3);
+    }
+
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 8%;
+    }
+
+    nav h1{
+      font-size:28px;
+      color:var(--secondary);
+    }
+
+    nav ul{
+      display:flex;
+      list-style:none;
+      gap:25px;
+    }
+
+    nav ul li a{
+      text-decoration:none;
+      color:white;
+      transition:0.3s;
+      font-weight:500;
+    }
+
+    nav ul li a:hover{
+      color:var(--secondary);
+    }
+
+    .theme-toggle{
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    section{
+      padding:100px 8%;
+    }
+
+    /* Hero */
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      position:relative;
+    }
+
+    #particles-js{
+      position:absolute;
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      z-index:-1;
+    }
+
+    .hero-text{
+      flex:1;
+    }
+
+    .hero-text h2{
+      font-size:60px;
+      line-height:1.2;
+    }
+
+    .hero-text h2 span{
+      color:var(--accent);
+    }
+
+    .typing{
+      font-size:24px;
+      color:var(--secondary);
+      margin:20px 0;
+      min-height:40px;
+    }
+
+    .hero-text p{
+      max-width:600px;
+      margin-bottom:25px;
+      color:#d1d5db;
+    }
+
+    .btns{
+      display:flex;
+      gap:15px;
+      margin-bottom:25px;
+    }
+
+    .btn{
+      padding:14px 28px;
+      border:none;
+      border-radius:40px;
+      cursor:pointer;
+      font-weight:600;
+      transition:0.4s;
+      text-decoration:none;
+      display:inline-block;
+    }
+
+    .primary{
+      background:linear-gradient(45deg,var(--accent),var(--secondary));
+      color:#fff;
+    }
+
+    .secondary{
+      border:2px solid var(--secondary);
+      color:#fff;
+    }
+
+    .btn:hover{
+      transform:translateY(-5px);
+      box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .socials{
+      display:flex;
+      gap:20px;
+    }
+
+    .socials a{
+      color:white;
+      font-size:24px;
+      transition:0.3s;
+    }
+
+    .socials a:hover{
+      color:var(--secondary);
+      transform:scale(1.2);
+    }
+
+    .hero-img{
+      flex:1;
+      text-align:center;
+    }
+
+    .hero-img img{
+      width: 410px;
+      height: 400px;
+      object-fit:cover;
+      border-radius:50%;
+      padding:15px;
+      transition:0.3s;
+    }
+
+    /* Cards */
+
+    .glass{
+      background:var(--card);
+      backdrop-filter:var(--glass);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:20px;
+      padding:30px;
+      transition:0.4s;
+    }
+
+    .glass:hover{
+      transform:translateY(-10px);
+    }
+
+    .section-title{
+      text-align:center;
+      font-size:42px;
+      margin-bottom:60px;
+      color:var(--secondary);
+    }
+
+    /* About */
+
+    .about-container{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:30px;
+      align-items:center;
+    }
+
+    .about-img img{
+      width:400px;
+      height:400px;
+      border-radius:50%;
+      padding:15px;
+      object-fit:cover;
+      transition:0.3s;
+    }
+
+    /* Skills */
+
+    .skills-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:25px;
+    }
+
+    .skill-card{
+      text-align:center;
+    }
+
+    .skill-card i{
+      font-size:55px;
+      margin-bottom:15px;
+    }
+
+    .progress{
+      background:#222;
+      height:10px;
+      border-radius:10px;
+      overflow:hidden;
+      margin-top:15px;
+    }
+
+    .progress-bar{
+      height:100%;
+      background:linear-gradient(90deg,var(--accent),var(--secondary));
+    }
+
+    /* Projects */
+
+    .projects-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:30px;
+    }
+
+    .project-card img{
+      width:100%;
+      border-radius:15px;
+      margin-bottom:15px;
+    }
+
+    .project-buttons{
+      margin-top:20px;
+      display:flex;
+      gap:10px;
+    }
+
+    /* Services */
+
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+    }
+
+    .service-card{
+      text-align:center;
+    }
+
+    .service-card i{
+      font-size:50px;
+      margin-bottom:20px;
+      color:var(--secondary);
+    }
+
+    /* Timeline */
+
+    .timeline{
+      border-left:3px solid var(--secondary);
+      padding-left:30px;
+    }
+
+    .timeline-item{
+      margin-bottom:40px;
+      position:relative;
+    }
+
+    .timeline-item::before{
+      content:'';
+      position:absolute;
+      left:-39px;
+      top:5px;
+      width:15px;
+      height:15px;
+      background:var(--accent);
+      border-radius:50%;
+    }
+
+    /* Contact */
+
+    .contact-container{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:30px;
+    }
+
+    form input,
+    form textarea{
+      width:100%;
+      padding:15px;
+      margin-bottom:20px;
+      border:none;
+      border-radius:12px;
+      background:rgba(255,255,255,0.08);
+      color:white;
+    }
+
+    form button{
+      width:100%;
+    }
+
+    /* Footer */
+
+    footer{
+      text-align:center;
+      padding:30px;
+      background:#050816;
+    }
+
+    /* Back To Top */
+
+    #topBtn{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:var(--accent);
+      color:white;
+      border:none;
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      cursor:pointer;
+      display:none;
+      font-size:20px;
+    }
+
+    /* Cursor */
+
+    .cursor{
+      width:20px;
+      height:20px;
+      border:2px solid var(--secondary);
+      border-radius:50%;
+      position:fixed;
+      pointer-events:none;
+      transform:translate(-50%,-50%);
+      z-index:999;
+    }
+
+    @media(max-width:768px){
+
+      .hero{
+        flex-direction:column;
+        text-align:center;
+      }
+
+      .hero-text h2{
+        font-size:42px;
+      }
+
+      nav ul{
+        display:none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="loader">
+  <div class="spinner"></div>
+</div>
+
+<div class="cursor"></div>
+
+<header>
+  <nav>
+    <h1>Web Developer</h1>
+
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#Education">Education</a></li> 
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="theme-toggle">
+      <i class="fa-solid fa-moon"></i>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div id="particles-js"></div>
+
+  <div class="hero-text" data-aos="fade-right">
+    <h2>Hello, I'm <br><span>Nandini Doradla</span></h2>
+
+    <div class="typing"></div>
+
+    <p>
+      Passionate Full Stack Web Developer skilled in building modern,
+      responsive, and scalable web applications using JavaScript,
+      Node.js, HTML5, CSS3, and modern UI technologies.
+    </p>
+
+    <div class="btns">
+      <a href="#contact" class="btn primary">Hire Me</a>
+      <a href="#projects" class="btn secondary">View Projects</a>
+    </div>
+      <div class="btn ">
+    <a href="file:///C:/Users/Nandu/OneDrive/Desktop/web%20deveiopment/css/resume.html" class="btn primary">
+      <i class="fa-solid fa-download"></i> Download Resume
+    </a>
+  </div>
+
+    <div class="socials">
+      <a href="#"><i class="fab fa-github"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+      <a href="#"><i class="fab fa-Email"></i></a>
+    </div>
+  </div>
+
+  <div class="hero-img" data-aos="fade-left">
+    <img src="C:\Users\Nandu\Downloads\nandu1.jpeg" alt="Profile Image">
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+
+<section id="about">
+
+  <h2 class="section-title">About Me</h2>
+
+  <div class="about-container">
+
+    <div class="about-img" data-aos="fade-right">
+      <img src="C:\Users\Nandu\Downloads\nandu1.jpeg" alt="Profile Image">
+    </div>
+
+    <div class="glass" data-aos="fade-left">
+      <h3>Professional Full Stack Developer</h3>
+      <br>
+      <p>
+        I am a passionate Full Stack Web Developer with strong expertise
+        in modern frontend and backend technologies. I enjoy creating
+        elegant, responsive, and user-friendly applications.
+      </p>
+
+      <br>
+
+      <p>
+        My focus is on building scalable and visually attractive digital
+        experiences while solving real-world problems through clean code.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SKILLS -->
+
+<section id="skills">
+
+  <h2 class="section-title">Skills</h2>
+
+  <div class="skills-grid">
+
+    <div class="glass skill-card" data-aos="zoom-in">
+      <i class="fab fa-html5" style="color:#ff5722;"></i>
+      <h3>HTML5</h3>
+      <div class="progress"><div class="progress-bar" style="width:95%"></div></div>
+    </div>
+
+    <div class="glass skill-card" data-aos="zoom-in">
+      <i class="fab fa-css3-alt" style="color:#2196f3;"></i>
+      <h3>CSS3</h3>
+      <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
+    </div>
+
+    <div class="glass skill-card" data-aos="zoom-in">
+      <i class="fab fa-js" style="color:#ffd600;"></i>
+      <h3>JavaScript</h3>
+      <div class="progress"><div class="progress-bar" style="width:88%"></div></div>
+    </div>
+
+    <div class="glass skill-card" data-aos="zoom-in">
+      <i class="fab fa-node-js" style="color:#4caf50;"></i>
+      <h3>Node.js</h3>
+      <div class="progress"><div class="progress-bar" style="width:82%"></div></div>
+    </div>
+
+    <div class="glass skill-card" data-aos="zoom-in">
+      <i class="fas fa-code" style="color:#ff9800;"></i>
+      <h3>C Language</h3>
+      <div class="progress"><div class="progress-bar" style="width:75%"></div></div>
+    </div>
+
+    <div class="glass skill-card" data-aos="zoom-in">
+      <i class="fas fa-file-word" style="color:#03a9f4;"></i>
+      <h3>MS Office</h3>
+      <div class="progress"><div class="progress-bar" style="width:85%"></div></div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- PROJECTS -->
+
+<section id="projects">
+
+  <h2 class="section-title">Projects</h2>
+
+  <div class="projects-grid">
+
+    <div class="glass project-card" data-aos="fade-up">
+      <img src="file:///C:/Users/Nandu/OneDrive/Desktop/web%20deveiopment/css/cell%20phone.html" alt="cell phone image">
+      <h3>keypad phone</h3>
+      <p>A simple keypad phone application built with HTML, CSS.</p>
+
+      <div class="project-buttons">
+        <a href="#" class="btn primary">Live Demo</a>
+        <a href="#" class="btn secondary">GitHub</a>
+      </div>
+    </div>
+
+    <div class="glass project-card" data-aos="fade-up">
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="">
+      <h3>Weather App</h3>
+      <p>Real-time weather forecasting application using APIs and JavaScript.</p>
+
+      <div class="project-buttons">
+        <a href="#" class="btn primary">Live Demo</a>
+        <a href="#" class="btn secondary">GitHub</a>
+      </div>
+    </div>
+
+    <div class="glass project-card" data-aos="fade-up">
+      <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c" alt="">
+      <h3>Task Management App</h3>
+      <p>Productivity application for managing daily tasks efficiently.</p>
+
+      <div class="project-buttons">
+        <a href="#" class="btn primary">Live Demo</a>
+        <a href="#" class="btn secondary">GitHub</a>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- Education -->
+
+    <section id="Education">
+
+  <h2 class="section-title">Education</h2>
+
+  <div class="Education-grid">
+
+    <div class="glass service-card" data-aos="flip-left">
+      <i class="fas fa-graduation-cap"></i>
+      <h3>Bachelor Degree</h3>
+      <p>Computer Applications</p>
+      <p>Sri Gayatri Degree College</p>
+    </div>
+
+    <div class="glass service-card" data-aos="flip-left">
+      <i class="fas fa-briefcase"></i>
+      <h3>Intermediate</h3>
+      <p>Sri Gayatri Degree College</p>
+    </div>
+
+    <div class="glass service-card" data-aos="flip-left">
+      <i class="fas fa-code"></i>
+      <h3>SSC</h3>
+      <p>Siddardha High School</p>
+    </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+
+<section id="contact">
+
+  <h2 class="section-title">Contact Me</h2>
+
+  <div class="contact-container">
+
+    <div class="glass">
+      <h3>Get In Touch</h3>
+      <br>
+
+      <p><i class="fa-solid fa-envelope"></i> nandinidoradla13@gmail.com</p>
+      <br>
+
+      <p><i class="fa-solid fa-phone"></i> +91 9381944531</p>
+      <br>
+
+      <p><i class="fa-solid fa-location-dot"></i> India</p>
+    </div>
+
+    <form class="glass">
+
+      <input type="text" placeholder="Your Name" required>
+
+      <input type="email" placeholder="yourmail@gmail.com" required>
+
+      <textarea rows="5" placeholder="Your Message"></textarea>
+
+      <button class="btn primary">Send Message</button>
+
+    </form>
+
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div class="socials" style="justify-content:center;margin-bottom:20px;">
+    <a href="#"><i class="fab fa-github"></i></a>
+    <a href="#"><i class="fab fa-linkedin"></i></a>
+    <a href="#"><i class="fab fa-Email"></i></a>
+  </div>
+
+  <p>© 2026 Full Stack Developer Portfolio. All Rights Reserved.</p>
+
+</footer>
+
+<button id="topBtn">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<!-- Scripts -->
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+
+  // Loader
+
+  window.addEventListener("load",()=>{
+    document.getElementById("loader").style.display="none";
+  });
+
+  // Typing Effect
+
+  const typing=document.querySelector(".typing");
+
+  const texts=[
+    "Full Stack Developer",
+    "JavaScript Developer",
+    "Node.js Developer"
+  ];
+
+  let i=0,j=0,current="",isDeleting=false;
+
+  function type(){
+
+    current=texts[i];
+
+    if(!isDeleting){
+      typing.textContent=current.substring(0,j++);
+      if(j>current.length){
+        isDeleting=true;
+        setTimeout(type,1000);
+        return;
+      }
+    }else{
+      typing.textContent=current.substring(0,j--);
+      if(j===0){
+        isDeleting=false;
+        i=(i+1)%texts.length;
+      }
+    }
+
+    setTimeout(type,isDeleting?60:120);
+  }
+
+  type();
+
+  // AOS
+
+  AOS.init({
+    duration:1000,
+    once:true
+  });
+
+  // Dark Light Toggle
+
+  const toggle=document.querySelector(".theme-toggle");
+
+  toggle.addEventListener("click",()=>{
+    document.body.classList.toggle("light");
+  });
+
+  // Back To Top
+
+  const topBtn=document.getElementById("topBtn");
+
+  window.onscroll=()=>{
+    if(document.documentElement.scrollTop>300){
+      topBtn.style.display="block";
+    }else{
+      topBtn.style.display="none";
+    }
+  }
+
+  topBtn.onclick=()=>{
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+  }
+
+  // Cursor
+
+  const cursor=document.querySelector(".cursor");
+
+  document.addEventListener("mousemove",(e)=>{
+    cursor.style.left=e.clientX+"px";
+    cursor.style.top=e.clientY+"px";
+  });
+
+  // Particles
+
+  particlesJS("particles-js",{
+    particles:{
+      number:{value:80},
+      size:{value:3},
+      move:{speed:2},
+      line_linked:{
+        enable:true
+      }
+    }
+  });
+
+</script>
+
+</body>
+</html>
